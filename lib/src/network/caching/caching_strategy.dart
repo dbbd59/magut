@@ -13,7 +13,11 @@ abstract class CachingStrategy {
     ResponseMagut networkValue,
     String key,
   ) async {
-    networkValue.cachedMilliseconds = DateTime.now().millisecondsSinceEpoch;
-    await LocalStorage.setString(key, networkValue.toJsonString());
+    final resM = ResponseMagut(
+      networkValue.body,
+      networkValue.statusCode,
+      DateTime.now().millisecondsSinceEpoch,
+    );
+    await LocalStorage.setString(key, resM.toJsonString());
   }
 }
