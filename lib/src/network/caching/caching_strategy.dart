@@ -1,3 +1,4 @@
+import 'package:http/http.dart' as http;
 import 'package:magut/magut.dart';
 import 'package:magut/src/network/response/response_magut.dart';
 
@@ -9,8 +10,8 @@ abstract class CachingStrategy {
     String key,
   );
 
-  Future<void> addToCache(
-    ResponseMagut networkValue,
+  Future<ResponseMagut> addToCache(
+    http.Response networkValue,
     String key,
   ) async {
     final resM = ResponseMagut(
@@ -19,5 +20,6 @@ abstract class CachingStrategy {
       DateTime.now().millisecondsSinceEpoch,
     );
     await LocalStorage.setString(key, resM.toJsonString());
+    return resM;
   }
 }

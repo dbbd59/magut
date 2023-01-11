@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:http/http.dart' as http;
 import 'package:magut/src/network/caching/caching_strategy.dart';
 import 'package:magut/src/network/response/response_magut.dart';
 import 'package:magut/src/storage/local_storage.dart';
@@ -35,11 +36,11 @@ class OverridingCache extends CachingStrategy {
     Function networkRequest,
     String key,
   ) async {
-    final ResponseMagut networkResult = await networkRequest();
-    await addToCache(
+    final http.Response networkResult = await networkRequest();
+
+    return addToCache(
       networkResult,
       key,
     );
-    return networkResult;
   }
 }
