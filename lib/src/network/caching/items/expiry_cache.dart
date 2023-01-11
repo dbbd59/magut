@@ -14,8 +14,11 @@ class ExpiryCache extends CachingStrategy {
     Function networkRequest,
     String key,
   ) async {
-    final ResponseMagut? cachedValue =
-        ResponseMagut.fromJsonString(LocalStorage.getString(key)!);
+    final valueFromStorage = LocalStorage.getString(key);
+
+    final cachedValue = valueFromStorage != null
+        ? ResponseMagut.fromJsonString(valueFromStorage)
+        : null;
     if (cachedValue == null || _hasCacheExpired(cachedValue)) {
       final ResponseMagut t = await networkRequest();
       await addToCache(t, key);
