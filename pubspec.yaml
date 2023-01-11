@@ -6,6 +6,12 @@ publish_to: none
 environment:
   sdk: ">=2.18.0 <3.0.0"
 
+dependencies:
+  flutter_dotenv: ^5.0.2
+  http: ^0.13.5
+  intl: ^0.18.0
+  shared_preferences: ^2.0.15
+
 dev_dependencies:
   ficcanaso: ^4.0.0
   mocktail: ^0.3.0
