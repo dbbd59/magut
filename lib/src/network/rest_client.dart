@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:magut/src/auth/token_utils.dart';
+import 'package:magut/src/network/caching/caching_strategy.dart';
+import 'package:magut/src/network/caching/network_cache.dart';
 
 const kDotEnvEndpointString = 'ENDPOINT';
 
@@ -10,20 +12,42 @@ class RestClient {
   RestClient({
     required this.httpClient,
   });
+
   final http.Client httpClient;
 
   Future<http.Response> get({
     required String api,
     String? endpoint,
     bool authenticated = true,
+    CachingStrategy? cachingStrategy,
   }) async {
     final e = _getEndpoint(endpoint);
     final headers = await _getHeaders(authenticated);
 
-    return httpClient.get(
-      Uri.parse('$e$api'),
-      headers: headers,
-    );
+    late http.Response res;
+
+    if (cachingStrategy == null) {
+      res = await httpClient.get(
+        Uri.parse('$e$api'),
+        headers: headers,
+      );
+    } else {
+      final resTmp = await NetworkCache().getOrUpdate(
+        cacheKey: api,
+        networkRequest: () => httpClient.get(
+          Uri.parse('$e$api'),
+          headers: headers,
+        ),
+        cachingStrategy: cachingStrategy,
+      );
+
+      res = http.Response(
+        resTmp.body,
+        resTmp.statusCode,
+      );
+    }
+
+    return res;
   }
 
   Future<http.Response> post({

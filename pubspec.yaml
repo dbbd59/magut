@@ -1,6 +1,6 @@
 name: magut
 description: Utilities
-version: 0.1.0+2
+version: 0.2.0+1
 repository: https://github.com/dbbd59/magut
 issue_tracker: https://github.com/dbbd59/magut/issues
 
@@ -11,9 +11,12 @@ dependencies:
   flutter_dotenv: ^5.0.2
   http: ^0.13.5
   intl: ^0.18.0
+  json_annotation: ^4.7.0
   shared_preferences: ^2.0.15
 
 dev_dependencies:
+  build_runner: ^2.3.3
   ficcanaso: ^4.0.0
+  json_serializable: ^6.5.4
   mocktail: ^0.3.0
   test: ^1.19.2

@@ -1,3 +1,7 @@
+# 0.2.0+1
+
+- adds caching network
+
 # 0.1.0+2
 
 - export model tokens
