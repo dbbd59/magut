@@ -3,7 +3,6 @@ description: Utilities
 version: 0.1.0+1
 repository: https://github.com/dbbd59/magut
 issue_tracker: https://github.com/dbbd59/magut/issues
-publish_to: https://pub.dev/
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
