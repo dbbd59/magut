@@ -29,14 +29,16 @@ abstract class CachingStrategy {
     http.Response networkValue,
     String key,
   ) {
-    LocalStorage.setString(
-      kCacheMagutString + key,
-      ResponseCacheItem(
-        networkValue.body,
-        networkValue.statusCode,
-        DateTime.now().millisecondsSinceEpoch,
-      ).toJsonString(),
-    );
+    if (networkValue.statusCode < 205) {
+      LocalStorage.setString(
+        kCacheMagutString + key,
+        ResponseCacheItem(
+          networkValue.body,
+          networkValue.statusCode,
+          DateTime.now().millisecondsSinceEpoch,
+        ).toJsonString(),
+      );
+    }
   }
 
   bool hasCacheExpired(ResponseCacheItem cachedValue, Duration cacheDuration) {
