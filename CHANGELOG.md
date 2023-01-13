@@ -1,3 +1,7 @@
+# 0.2.0+3
+
+- adds onTokenExpiredCallback
+
 # 0.2.0+2
 
 - improvments
