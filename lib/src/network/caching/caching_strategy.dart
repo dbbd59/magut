@@ -17,7 +17,7 @@ abstract class CachingStrategy {
   );
 
   ResponseCacheItem? getValueFromStorage(String key) {
-    final valueFromStorage = LocalStorage.getString(key);
+    final valueFromStorage = LocalStorage.getString(kCacheMagutString + key);
 
     final cachedValue = valueFromStorage != null
         ? ResponseCacheItem.fromJsonString(valueFromStorage)
