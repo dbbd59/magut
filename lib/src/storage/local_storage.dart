@@ -29,6 +29,16 @@ class LocalStorage {
     }
   }
 
+  static Future clearOnlyKeysWithPrefix(
+    String prefix,
+  ) async {
+    for (final key in _prefs.getKeys()) {
+      if (key.startsWith(prefix)) {
+        await _prefs.remove(key);
+      }
+    }
+  }
+
   static bool? getBool(String key) {
     return _prefs.getBool(key);
   }

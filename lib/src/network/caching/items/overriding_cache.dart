@@ -2,20 +2,17 @@ import 'dart:async';
 
 import 'package:http/http.dart' as http;
 import 'package:magut/src/network/caching/caching_strategy.dart';
-import 'package:magut/src/network/response/response_magut.dart';
-import 'package:magut/src/storage/local_storage.dart';
 
 class OverridingCache extends CachingStrategy {
+  OverridingCache();
+
   @override
-  Future<ResponseMagut> get(
+  Future<http.Response> get(
     Function networkRequest,
     String key,
   ) async {
-    final valueFromStorage = LocalStorage.getString(key);
+    final cachedValue = getValueFromStorage(key);
 
-    final cachedValue = valueFromStorage != null
-        ? ResponseMagut.fromJsonString(valueFromStorage)
-        : null;
     if (cachedValue != null) {
       unawaited(
         getAndCacheNetworkValue(
@@ -23,7 +20,11 @@ class OverridingCache extends CachingStrategy {
           key,
         ),
       );
-      return cachedValue;
+
+      return http.Response(
+        cachedValue.body,
+        cachedValue.statusCode,
+      );
     } else {
       return getAndCacheNetworkValue(
         networkRequest,
@@ -32,15 +33,16 @@ class OverridingCache extends CachingStrategy {
     }
   }
 
-  Future<ResponseMagut> getAndCacheNetworkValue(
+  Future<http.Response> getAndCacheNetworkValue(
     Function networkRequest,
     String key,
   ) async {
     final http.Response networkResult = await networkRequest();
-
-    return addToCache(
+    addToCache(
       networkResult,
       key,
     );
+
+    return networkResult;
   }
 }
