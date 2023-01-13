@@ -32,18 +32,13 @@ class RestClient {
         headers: headers,
       );
     } else {
-      final resTmp = await NetworkCache().getOrUpdate(
+      res = await NetworkCache().getOrUpdate(
         cacheKey: api,
         networkRequest: () => httpClient.get(
           Uri.parse('$e$api'),
           headers: headers,
         ),
         cachingStrategy: cachingStrategy,
-      );
-
-      res = http.Response(
-        resTmp.body,
-        resTmp.statusCode,
       );
     }
 
