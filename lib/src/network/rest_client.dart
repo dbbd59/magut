@@ -11,9 +11,11 @@ const kDotEnvEndpointString = 'ENDPOINT';
 class RestClient {
   RestClient({
     required this.httpClient,
+    this.onTokenExpired,
   });
 
   final http.Client httpClient;
+  final Function? onTokenExpired;
 
   Future<http.Response> get({
     required String api,
@@ -83,7 +85,9 @@ class RestClient {
     };
 
     if (authenticated) {
-      final tokens = await TokensUtils.getTokens();
+      final tokens = await TokensUtils.getTokens(
+        onTokenExpired: onTokenExpired,
+      );
       if (tokens != null) {
         headers['Authorization'] = 'Bearer ${tokens.accessToken}';
       }
