@@ -1,3 +1,7 @@
+# 0.2.0+2
+
+- improvments
+
 # 0.2.0+1
 
 - adds caching network
