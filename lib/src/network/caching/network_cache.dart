@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:http/http.dart' as http;
 import 'package:magut/src/network/caching/caching_strategy.dart';
+import 'package:magut/src/network/caching/items/expiry_cache.dart';
 import 'package:magut/src/network/response/response_cache_item.dart';
 import 'package:magut/src/storage/local_storage.dart';
-
-import 'items/expiry_cache.dart';
 
 class NetworkCache {
   Future<http.Response> getOrUpdate({
