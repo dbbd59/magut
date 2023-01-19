@@ -145,6 +145,11 @@ class CalendarUtils {
 
     return list.sublist(i)..addAll(list.sublist(0, i));
   }
+
+  static int weekNumber(DateTime date) {
+    final dayOfYear = int.parse(DateFormat('D').format(date));
+    return ((dayOfYear - date.weekday + 10) / 7).floor();
+  }
 }
 
 enum StartingDayOfWeek {

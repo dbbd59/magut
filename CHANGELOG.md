@@ -1,3 +1,7 @@
+# 0.2.0+6
+
+- weeknumber
+
 # 0.2.0+5
 
 - readme updates
