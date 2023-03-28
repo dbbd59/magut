@@ -22,22 +22,24 @@ class RestClient {
     String? endpoint,
     bool authenticated = true,
     CachingStrategy? cachingStrategy,
+    Map<String, String>? queryParameters,
   }) async {
     final e = _getEndpoint(endpoint);
     final headers = await _getHeaders(authenticated);
+    final uri = _encodeUri('$e$api', queryParameters);
 
     late http.Response res;
 
     if (cachingStrategy == null) {
       res = await httpClient.get(
-        Uri.parse('$e$api'),
+        uri,
         headers: headers,
       );
     } else {
       res = await NetworkCache().getOrUpdate(
         cacheKey: api,
         networkRequest: () => httpClient.get(
-          Uri.parse('$e$api'),
+          uri,
           headers: headers,
         ),
         cachingStrategy: cachingStrategy,
@@ -52,12 +54,14 @@ class RestClient {
     Map<String, dynamic>? body,
     String? endpoint,
     bool authenticated = true,
+    Map<String, String>? queryParameters,
   }) async {
     final e = _getEndpoint(endpoint);
     final headers = await _getHeaders(authenticated);
+    final uri = _encodeUri('$e$api', queryParameters);
 
     return httpClient.post(
-      Uri.parse('$e$api'),
+      uri,
       headers: headers,
       body: jsonEncode(body),
     );
@@ -68,12 +72,14 @@ class RestClient {
     required Map<String, dynamic>? body,
     String? endpoint,
     bool authenticated = true,
+    Map<String, String>? queryParameters,
   }) async {
     final e = _getEndpoint(endpoint);
     final headers = await _getHeaders(authenticated);
+    final uri = _encodeUri('$e$api', queryParameters);
 
     return httpClient.put(
-      Uri.parse('$e$api'),
+      uri,
       headers: headers,
       body: jsonEncode(body),
     );
@@ -98,5 +104,16 @@ class RestClient {
   String? _getEndpoint(String? endpoint) {
     final e = endpoint ?? dotenv.env[kDotEnvEndpointString];
     return e;
+  }
+
+  Uri _encodeUri(String url, Map<String, String>? queryParameters) {
+    final uri = Uri.parse(url);
+
+    final allQueryParams = Map<String, String>.from(uri.queryParameters);
+    if (queryParameters != null) {
+      allQueryParams.addAll(queryParameters);
+    }
+
+    return uri.replace(queryParameters: allQueryParams);
   }
 }
